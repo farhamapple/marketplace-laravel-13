@@ -1,0 +1,39 @@
+@import 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..1000;1,9..40,300..1000&family=JetBrains+Mono:wght@400..800&display=swap';
+@import 'https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap';
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-display: 'General Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+    --color-primary: #6366F1;
+    --color-primary-hover: #4F46E5;
+    --color-secondary: #20970B;
+    --color-neutral: #9C9C9C;
+    --color-bg: #FAFAFA;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #0A0A0A;
+    --color-text-secondary: #6B6B6B;
+    --color-border: #E8E8EC;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-error: #EF4444;
+
+    --radius-btn: 6px;
+    --radius-card: 12px;
+    --radius-chip: 9999px;
+
+    --shadow-card-hover: 0 8px 30px rgba(0,0,0,0.08);
+    --shadow-btn-glow: 0 4px 12px rgba(99,102,241,0.35);
+    --shadow-focus: 0 0 0 3px rgba(99,102,241,0.12);
+}
+
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
+}

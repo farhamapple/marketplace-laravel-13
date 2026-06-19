@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Product;
+use App\Models\Transaction;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class TransactionController extends Controller
+{
+    public function index(): View
+    {
+        return view('transactions.index', [
+            'transactions' => Transaction::with(['product.category', 'user'])->latest()->get(),
+        ]);
+    }
+
+    public function create(): View
+    {
+        return view('transactions.create', [
+            'products' => Product::with('category')->get(),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'type' => 'required|in:purchase,sale',
+            'quantity' => 'required|integer|min:1',
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        $product = Product::findOrFail($validated['product_id']);
+        $unitPrice = $product->price;
+        $totalPrice = $unitPrice * $validated['quantity'];
+
+        Transaction::create([
+            'user_id' => Auth::id(),
+            'product_id' => $validated['product_id'],
+            'type' => $validated['type'],
+            'quantity' => $validated['quantity'],
+            'total' => $totalPrice,
+            'notes' => $validated['notes'],
+        ]);
+
+        if ($validated['type'] === 'sale') {
+            $product->decrement('stock', $validated['quantity']);
+            $product->increment('sold', $validated['quantity']);
+        } else {
+            $product->increment('stock', $validated['quantity']);
+        }
+
+        return to_route('admin.transactions.index')->with('success', 'Transaksi berhasil dicatat.');
+    }
+
+    public function show(Transaction $transaction): View
+    {
+        return view('transactions.show', [
+            'transaction' => $transaction->load(['product.category', 'user']),
+        ]);
+    }
+
+    public function destroy(Transaction $transaction): RedirectResponse
+    {
+        $transaction->delete();
+
+        return to_route('admin.transactions.index')->with('success', 'Transaksi berhasil dihapus.');
+    }
+}
