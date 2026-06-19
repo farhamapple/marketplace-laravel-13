@@ -9,7 +9,7 @@
 <body class="font-sans bg-bg text-text-primary antialiased">
     <nav class="sticky top-0 z-50 h-14 border-b border-border bg-surface/80 backdrop-blur-lg">
         <div class="mx-auto flex h-full max-w-[1280px] items-center justify-between px-6">
-            <a href="/" class="font-display text-lg font-semibold tracking-tight">Genesis</a>
+            <a href="/" class="font-display text-lg font-semibold tracking-tight">MWL 13</a>
             <div class="hidden items-center gap-6 md:flex">
                 @auth
                     @if (Auth::user()->isAdmin())
@@ -36,11 +36,6 @@
                 @endauth
             </div>
             <div class="flex items-center gap-3">
-                <button class="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-1.5 text-sm text-text-secondary">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    Search
-                    <kbd class="rounded bg-bg px-1.5 py-0.5 text-xs">⌘K</kbd>
-                </button>
                 @auth
                     <form method="POST" action="{{ url('/logout') }}">
                         @csrf
