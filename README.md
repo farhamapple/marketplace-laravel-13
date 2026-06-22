@@ -161,6 +161,23 @@ API untuk konsumsi eksternal dengan autentikasi **Sanctum Bearer Token**.
 | `/api/v1/products/{id}` | GET | - | Detail produk dengan kategori |
 | `/api/v1/categories` | GET | - | List kategori dengan jumlah produk |
 
+### Cart & Checkout
+
+| Endpoint | Method | Auth | Keterangan |
+|----------|--------|------|------------|
+| `/api/v1/cart` | GET | Bearer | List item keranjang |
+| `/api/v1/cart` | POST | Bearer | Tambah produk ke keranjang |
+| `/api/v1/cart/{id}` | PATCH | Bearer | Update quantity |
+| `/api/v1/cart/{id}` | DELETE | Bearer | Hapus item dari keranjang |
+| `/api/v1/cart/checkout` | POST | Bearer | Checkout → buat transaksi |
+
+### Transaction History
+
+| Endpoint | Method | Auth | Keterangan |
+|----------|--------|------|------------|
+| `/api/v1/transactions` | GET | Bearer | Riwayat transaksi (pagination, filter `?type=sale`) |
+| `/api/v1/transactions/{id}` | GET | Bearer | Detail transaksi |
+
 ### Query Parameters (List Customer & Product)
 
 | Parameter | Contoh | Keterangan |
