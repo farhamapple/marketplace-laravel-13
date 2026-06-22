@@ -21,5 +21,5 @@
 - [ ] **#11 — Unit & Feature Tests** — Tambah test untuk workflow utama
 - [ ] **#12 — Frontend framework (Alpine.js)** — Ganti semua JS inline agar terstruktur
 - [ ] **#13 — Role & Permission granular** — Policy/Gate untuk tiap aksi
-- [ ] **#14 — Soft Deletes** — Produk & kategori tidak hilang permanen
+- [x] **#14 — Soft Deletes** — Produk & kategori tidak hilang permanen
 - [x] **#15 — Localization** — Konsistenkan Bahasa Indonesia di auth, layout, home, welcome
