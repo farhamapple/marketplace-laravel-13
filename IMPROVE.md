@@ -14,7 +14,7 @@
 - [x] **#7 — Seeder & Factory** — CategoryFactory, ProductFactory, DatabaseSeeder pakai factory
 - [x] **#8 — Slug update otomatis** — Saat edit kategori, slug ikut berubah
 - [x] **#9 — Notifikasi stok menipis** — Alert banner di dashboard admin untuk produk stok 1-5
-- [ ] **#10 — Export Laporan (PDF/Excel)** — Export transaksi per periode
+- [x] **#10 — Export Laporan (PDF/Excel/CSV)** — Export transaksi per periode (XLSX, CSV, PDF)
 
 ## 🔵 Low Impact / Nice-to-have
 

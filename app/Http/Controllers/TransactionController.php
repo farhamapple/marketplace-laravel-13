@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransactionsExport;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Models\Product;
 use App\Models\Transaction;
+use Dompdf\Dompdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,6 +75,50 @@ class TransactionController extends Controller
 
         return view('transactions.show', [
             'transaction' => $transaction,
+        ]);
+    }
+
+    public function exportXlsx(Request $request)
+    {
+        $export = new TransactionsExport($request->date_from, $request->date_to);
+        return $export->downloadXlsx();
+    }
+
+    public function exportCsv(Request $request)
+    {
+        $export = new TransactionsExport($request->date_from, $request->date_to);
+        return $export->downloadCsv();
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Transaction::with(['product.category', 'user']);
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $transactions = $query->latest()->get();
+
+        $html = view('transactions.pdf', [
+            'transactions' => $transactions,
+            'dateFrom' => $request->date_from,
+            'dateTo' => $request->date_to,
+        ])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        return response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="transactions.pdf"',
+            'Cache-Control' => 'max-age=0',
         ]);
     }
 

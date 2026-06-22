@@ -79,6 +79,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::resource('products', ProductController::class);
         Route::resource('transactions', TransactionController::class)->except(['edit', 'update']);
+        Route::get('/transactions/export/xlsx', [TransactionController::class, 'exportXlsx'])->name('transactions.export.xlsx');
+        Route::get('/transactions/export/csv', [TransactionController::class, 'exportCsv'])->name('transactions.export.csv');
+        Route::get('/transactions/export/pdf', [TransactionController::class, 'exportPdf'])->name('transactions.export.pdf');
     });
 
     Route::prefix('customer')->name('customer.')->group(function () {

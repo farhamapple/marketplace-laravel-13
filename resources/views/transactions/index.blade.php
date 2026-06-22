@@ -16,7 +16,7 @@
         <div class="mb-6 rounded-xl border border-success/20 bg-success/5 px-4 py-3 text-sm text-success">{{ session('success') }}</div>
     @endif
 
-    <div class="mb-4">
+    <div class="mb-4 flex flex-wrap items-end gap-3">
         <form method="GET" action="{{ route('admin.transactions.index') }}" class="flex flex-wrap items-center gap-3">
             <div>
                 <label class="mb-1 block text-xs font-medium text-text-secondary">Dari Tanggal</label>
@@ -33,6 +33,12 @@
                 @endif
             </div>
         </form>
+        <div class="flex items-end gap-2">
+            <span class="text-xs font-medium text-text-secondary self-center mb-1">Export:</span>
+            <a href="{{ route('admin.transactions.export.xlsx', request()->only(['date_from', 'date_to'])) }}" class="rounded-xl border border-border px-3 py-2 text-sm font-medium text-text-secondary hover:bg-success/5 hover:text-success hover:border-success/30 transition-colors">Excel</a>
+            <a href="{{ route('admin.transactions.export.csv', request()->only(['date_from', 'date_to'])) }}" class="rounded-xl border border-border px-3 py-2 text-sm font-medium text-text-secondary hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-colors">CSV</a>
+            <a href="{{ route('admin.transactions.export.pdf', request()->only(['date_from', 'date_to'])) }}" class="rounded-xl border border-border px-3 py-2 text-sm font-medium text-text-secondary hover:bg-warning/5 hover:text-warning hover:border-warning/30 transition-colors">PDF</a>
+        </div>
     </div>
 
     <div class="overflow-hidden rounded-[12px] border border-border bg-surface">
