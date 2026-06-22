@@ -46,8 +46,12 @@
     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="product-grid">
         @forelse ($products as $product)
         <div class="product-card rounded-[12px] border border-border bg-surface p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]" data-category="{{ $product->category->slug }}">
-            <div class="mb-4 flex h-32 items-center justify-center rounded-lg bg-gradient-to-br from-primary/5 to-secondary/5">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="text-primary/30"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+            <div class="mb-4 flex h-32 items-center justify-center rounded-lg bg-gradient-to-br from-primary/5 to-secondary/5 overflow-hidden">
+                @if ($product->image)
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover">
+                @else
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="text-primary/30"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                @endif
             </div>
             <div class="mb-1 flex items-start justify-between gap-2">
                 <h3 class="font-display font-semibold tracking-tight">{{ $product->name }}</h3>

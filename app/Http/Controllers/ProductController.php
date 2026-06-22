@@ -51,11 +51,16 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
 
         Product::create($validated);
 
-        return to_route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+        return to_route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function edit(Product $product): View
@@ -73,11 +78,18 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        } else {
+            unset($validated['image']);
+        }
 
         $product->update($validated);
 
-        return to_route('products.index')->with('success', 'Produk berhasil diperbarui.');
+        return to_route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product): RedirectResponse

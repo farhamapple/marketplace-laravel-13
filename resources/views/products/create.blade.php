@@ -12,7 +12,7 @@
     <h1 class="font-display text-[clamp(1.75rem,3vw,2rem)] font-bold tracking-[-0.03em]">Tambah Produk</h1>
     <p class="mt-1 text-sm text-text-secondary">Buat produk baru</p>
 
-    <form method="POST" action="{{ route('admin.products.store') }}" class="mt-8 space-y-5">
+    <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data" class="mt-8 space-y-5">
         @csrf
 
         <div>
@@ -30,6 +30,12 @@
                 @endforeach
             </select>
             @error('category_id') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+        </div>
+
+        <div>
+            <label for="image" class="mb-1.5 block text-sm font-medium">Gambar Produk</label>
+            <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp" class="w-full rounded-xl border border-border bg-surface px-4 py-2.5 text-sm outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary hover:file:bg-primary/20">
+            @error('image') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
         </div>
 
         <div class="grid grid-cols-2 gap-4">

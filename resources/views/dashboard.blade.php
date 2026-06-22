@@ -78,6 +78,7 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-border bg-bg">
+                        <th class="px-4 py-3 text-left font-medium text-text-secondary w-12">Gambar</th>
                         <th class="px-4 py-3 text-left font-medium text-text-secondary">Nama</th>
                         <th class="px-4 py-3 text-left font-medium text-text-secondary">Kategori</th>
                         <th class="px-4 py-3 text-right font-medium text-text-secondary">Harga</th>
@@ -88,6 +89,15 @@
                 <tbody>
                     @forelse ($products as $product)
                     <tr class="border-b border-border last:border-0 hover:bg-bg/50 transition-colors">
+                        <td class="px-4 py-3">
+                            @if ($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-10 w-10 rounded-lg object-cover border border-border">
+                            @else
+                                <div class="h-10 w-10 rounded-lg bg-neutral/10 flex items-center justify-center">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-text-secondary/40"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                                </div>
+                            @endif
+                        </td>
                         <td class="px-4 py-3 font-medium">{{ $product->name }}</td>
                         <td class="px-4 py-3 text-text-secondary">
                             <span class="inline-flex rounded-full bg-neutral/10 px-2.5 py-0.5 text-xs font-medium text-text-secondary">{{ $product->category->name }}</span>
@@ -98,7 +108,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-4 py-10 text-center text-sm text-text-secondary">Tidak ada produk yang ditemukan.</td>
+                        <td colspan="6" class="px-4 py-10 text-center text-sm text-text-secondary">Tidak ada produk yang ditemukan.</td>
                     </tr>
                     @endforelse
                 </tbody>
