@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Admin')
 
 @section('content')
 <div class="mx-auto max-w-[1280px] px-6 py-10">

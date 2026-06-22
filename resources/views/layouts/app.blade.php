@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Genesis') }} — @yield('title', 'Design System Files')</title>
+    <title>{{ config('app.name', 'Marketplace') }} — @yield('title', 'Marketplace With Laravel 13')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans bg-bg text-text-primary antialiased">
@@ -45,8 +45,8 @@
                         {{ substr(Auth::user()->name, 0, 1) }}
                     </div>
                 @else
-                    <a href="{{ url('/login') }}" class="btn btn-secondary text-sm">Log in</a>
-                    <a href="{{ url('/register') }}" class="btn btn-primary text-sm">Register</a>
+                    <a href="{{ url('/login') }}" class="btn btn-secondary text-sm">Masuk</a>
+                    <a href="{{ url('/register') }}" class="btn btn-primary text-sm">Daftar</a>
                 @endauth
             </div>
         </div>

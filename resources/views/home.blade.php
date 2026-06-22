@@ -102,8 +102,8 @@
         <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p>&copy; {{ date('Y') }} Marketplace With Laravel 13.</p>
             <div class="flex items-center gap-6">
-                <a href="{{ url('/login') }}" class="hover:text-text-primary transition-colors">Login</a>
-                <a href="{{ url('/register') }}" class="hover:text-text-primary transition-colors">Register</a>
+                <a href="{{ url('/login') }}" class="hover:text-text-primary transition-colors">Masuk</a>
+                <a href="{{ url('/register') }}" class="hover:text-text-primary transition-colors">Daftar</a>
             </div>
         </div>
     </footer>
