@@ -82,6 +82,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
         Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
         Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+        Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
         Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     });
 });

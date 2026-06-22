@@ -58,6 +58,27 @@ class CartController extends Controller
         return redirect()->route("customer.dashboard")->with("success", "Produk ditambahkan ke keranjang.");
     }
 
+    public function update(Request $request, Cart $cart): RedirectResponse
+    {
+        if ($cart->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $product = $cart->product;
+
+        if ($product->stock < $validated['quantity']) {
+            return back()->withErrors(['quantity' => 'Stok tidak mencukupi. Stok tersedia: ' . $product->stock]);
+        }
+
+        $cart->update(['quantity' => $validated['quantity']]);
+
+        return back()->with('success', 'Jumlah item berhasil diperbarui.');
+    }
+
     public function destroy(Cart $cart): RedirectResponse
     {
         if ($cart->user_id !== Auth::id()) {

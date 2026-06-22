@@ -43,9 +43,18 @@
                 </div>
                 <div class="mt-2 flex items-center gap-4 text-xs text-text-secondary">
                     <span>@ {{ number_format($item->product->price, 0, ',', '.') }} / item</span>
-                    <span>Qty: {{ $item->quantity }}</span>
                     <span>Stok: {{ $item->product->stock }}</span>
                 </div>
+                <form method="POST" action="{{ route('customer.cart.update', $item) }}" class="mt-2 flex items-center gap-2">
+                    @csrf
+                    @method('PATCH')
+                    <div class="flex items-center rounded-lg border border-border overflow-hidden">
+                        <button type="button" class="qty-minus px-2.5 py-1.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer text-sm leading-none" data-target="qty-{{ $item->id }}">−</button>
+                        <input type="number" name="quantity" id="qty-{{ $item->id }}" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="w-12 border-x border-border bg-bg px-2 py-1.5 text-center text-sm outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none">
+                        <button type="button" class="qty-plus px-2.5 py-1.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer text-sm leading-none" data-target="qty-{{ $item->id }}">+</button>
+                    </div>
+                    <button type="submit" class="rounded-lg px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors cursor-pointer">Update</button>
+                </form>
             </div>
             <form method="POST" action="{{ route('customer.cart.destroy', $item) }}" onsubmit="return confirm('Hapus item ini dari keranjang?')">
                 @csrf
@@ -82,4 +91,25 @@
     </div>
     @endif
 </div>
+
+@push('scripts')
+<script>
+document.querySelectorAll('.qty-minus, .qty-plus').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        const targetId = this.dataset.target;
+        const input = document.getElementById(targetId);
+        const min = parseInt(input.min) || 1;
+        const max = parseInt(input.max) || 9999;
+        let val = parseInt(input.value) || min;
+
+        if (this.classList.contains('qty-minus')) {
+            val = Math.max(min, val - 1);
+        } else {
+            val = Math.min(max, val + 1);
+        }
+        input.value = val;
+    });
+});
+</script>
+@endpush
 @endsection
