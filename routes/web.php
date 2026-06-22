@@ -13,9 +13,15 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Transaction;
 
-Route::get('/', function () {
+Route::get('/', function (Illuminate\Http\Request $request) {
+    $query = App\Models\Product::with('category');
+
+    if ($request->filled('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+
     return view('home', [
-        'products' => App\Models\Product::with('category')->latest()->paginate(12)->withQueryString(),
+        'products' => $query->latest()->paginate(12)->withQueryString(),
         'totalProduk' => App\Models\Product::count(),
         'totalStok' => App\Models\Product::sum('stock'),
         'totalTerjual' => App\Models\Transaction::where('type', 'sale')->sum('quantity'),

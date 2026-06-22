@@ -49,8 +49,15 @@
 
     {{-- Product Grid --}}
     <section class="pb-20">
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
             <h2 class="font-display text-[clamp(1.5rem,3vw,2rem)] font-bold tracking-[-0.03em]">Semua Produk</h2>
+            <form method="GET" action="{{ url('/') }}" class="flex items-center gap-2">
+                <input type="text" name="search" placeholder="Cari produk..." value="{{ request('search') }}" class="rounded-xl border border-border bg-surface px-4 py-2.5 text-sm w-56 placeholder:text-text-secondary/50 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 transition-all">
+                <button type="submit" class="rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors cursor-pointer">Cari</button>
+                @if (request('search'))
+                    <a href="{{ url('/') }}" class="rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-text-secondary hover:bg-bg transition-colors">Reset</a>
+                @endif
+            </form>
         </div>
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             @forelse ($products as $product)
