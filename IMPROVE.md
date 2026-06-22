@@ -10,7 +10,7 @@
 
 ## 🟡 Medium Impact
 
-- [ ] **#6 — Form Request Validation** — Pisah validasi ke `app/Http/Requests/` biar reusable
+- [x] **#6 — Form Request Validation** — Pisah validasi ke `app/Http/Requests/` biar reusable
 - [ ] **#7 — Seeder & Factory** — Data dummy untuk testing (users, categories, products, transactions)
 - [x] **#8 — Slug update otomatis** — Saat edit kategori, slug ikut berubah
 - [ ] **#9 — Notifikasi stok menipis** — Alert/notifikasi kalau stok produk di bawah threshold
