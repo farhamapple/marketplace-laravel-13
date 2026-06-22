@@ -5,8 +5,8 @@
 - [x] **#1 — Gambar Produk** — Tambah kolom `image` + upload file pada produk
 - [x] **#2 — Pagination di semua list** — Produk, kategori, customer transactions pakai `paginate()`
 - [x] **#3 — Search di halaman Home** — Customer bisa mencari produk dari halaman depan
-- [ ] **#4 — Update quantity di Cart** — Cart bisa ubah jumlah langsung tanpa perlu hapus/add ulang
-- [ ] **#5 — Halaman detail produk (`/products/{id}`)** — Halaman publik untuk lihat detail & gambar produk
+- [x] **#4 — Update quantity di Cart** — Cart bisa ubah jumlah langsung dengan +/- buttons
+- [x] **#5 — Halaman detail produk (`/product/{id}`)** — Halaman publik dengan gambar, info, add-to-cart
 
 ## 🟡 Medium Impact
 
