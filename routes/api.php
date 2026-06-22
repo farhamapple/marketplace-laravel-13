@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -15,4 +16,10 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('customers', CustomerController::class)
             ->parameters(['customers' => 'customer']);
     });
+});
+
+Route::prefix('v1')->group(function () {
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{product}', [ProductController::class, 'show']);
+    Route::get('/categories', [ProductController::class, 'categories']);
 });

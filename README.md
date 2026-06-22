@@ -153,14 +153,23 @@ API untuk konsumsi eksternal dengan autentikasi **Sanctum Bearer Token**.
 | `/api/v1/customers/{id}` | PATCH | Bearer | Partial update |
 | `/api/v1/customers/{id}` | DELETE | Bearer | Soft-delete customer |
 
-### Query Parameters (List)
+### Product Catalog (Public)
+
+| Endpoint | Method | Auth | Keterangan |
+|----------|--------|------|------------|
+| `/api/v1/products` | GET | - | List produk (pagination, search, filter category) |
+| `/api/v1/products/{id}` | GET | - | Detail produk dengan kategori |
+| `/api/v1/categories` | GET | - | List kategori dengan jumlah produk |
+
+### Query Parameters (List Customer & Product)
 
 | Parameter | Contoh | Keterangan |
 |-----------|--------|------------|
-| `?per_page=` | `?per_page=25` | Item per halaman (max 100) |
+| `?per_page=` | `?per_page=25` | Item per halaman (max 100/48) |
 | `?page=` | `?page=2` | Halaman |
-| `?search=` | `?search=budi` | Cari nama/email |
-| `?sort=` | `?sort=-name` | Sort kolom, awali `-` untuk descending |
+| `?search=` | `?search=budi` | Cari nama/email (customer) atau nama (product) |
+| `?sort=` | `?sort=-name` | Sort kolom, awali `-` untuk descending (customer only) |
+| `?category=` | `?category=elektronik` | Filter produk berdasarkan slug kategori |
 
 ### Response Format
 
