@@ -36,16 +36,15 @@
         </div>
     </div>
 
-    <div class="mb-8 flex flex-wrap gap-2">
-        <button class="rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-text-secondary hover:bg-bg transition-colors category-filter active" data-category="all">Semua</button>
+    <div x-data="{ category: 'all' }" class="mb-8 flex flex-wrap gap-2">
+        <button @click="category = 'all'" :class="category === 'all' ? 'text-primary border-primary' : 'text-text-secondary'" class="rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium hover:bg-bg transition-colors">Semua</button>
         @foreach ($categories as $category)
-            <button class="rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium text-text-secondary hover:bg-bg transition-colors category-filter" data-category="{{ $category->slug }}">{{ $category->name }}</button>
+            <button @click="category = '{{ $category->slug }}'" :class="category === '{{ $category->slug }}' ? 'text-primary border-primary' : 'text-text-secondary'" class="rounded-full border border-border bg-surface px-4 py-1.5 text-xs font-medium hover:bg-bg transition-colors">{{ $category->name }}</button>
         @endforeach
-    </div>
 
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="product-grid">
-        @forelse ($products as $product)
-        <div class="product-card rounded-[12px] border border-border bg-surface p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]" data-category="{{ $product->category->slug }}">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full mt-4">
+            @forelse ($products as $product)
+            <div x-show="category === 'all' || category === '{{ $product->category->slug }}'" x-transition:enter.duration.200ms class="rounded-[12px] border border-border bg-surface p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
             <div class="mb-4 flex h-32 items-center justify-center rounded-lg bg-gradient-to-br from-primary/5 to-secondary/5 overflow-hidden">
                 @if ($product->image)
                     <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover">
@@ -85,18 +84,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.querySelectorAll('.category-filter').forEach(btn => {
-    btn.addEventListener('click', function () {
-        document.querySelectorAll('.category-filter').forEach(b => b.classList.remove('active', 'text-primary', 'border-primary'));
-        this.classList.add('active', 'text-primary', 'border-primary');
-        const cat = this.dataset.category;
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.dataset.category === cat) ? '' : 'none';
-        });
-    });
-});
-</script>
-@endpush

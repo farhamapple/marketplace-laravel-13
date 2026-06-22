@@ -107,61 +107,98 @@
     </div>
 </div>
 
-<div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+<div x-data="{ open: false, loading: false, data: null, error: null }"
+     x-show="open"
+     x-cloak
+     @keydown.escape.window="open = false"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+     @click.self="open = false">
     <div class="w-full max-w-[520px] rounded-[12px] border border-border bg-surface shadow-xl max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-border px-6 py-4">
             <h3 class="font-display text-lg font-bold tracking-[-0.03em]">Detail Transaksi</h3>
-            <button type="button" id="closeModal" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary hover:bg-bg hover:text-text-primary transition-colors cursor-pointer">
+            <button type="button" @click="open = false" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary hover:bg-bg hover:text-text-primary transition-colors cursor-pointer">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
             </button>
         </div>
-        <div id="modalBody" class="p-6 space-y-4">
-            <div class="flex items-center justify-center py-10">
-                <div class="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                <span class="ml-3 text-sm text-text-secondary">Memuat...</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('detailModal');
-    const modalBody = document.getElementById('modalBody');
-    const closeBtn = document.getElementById('closeModal');
-
-    function openModal() {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        document.body.style.overflow = '';
-    }
-
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) closeModal();
-    });
-
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeModal();
-    });
-
-    document.querySelectorAll('.btn-detail').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-            modalBody.innerHTML = `
+        <div class="p-6 space-y-4">
+            <template x-if="loading">
                 <div class="flex items-center justify-center py-10">
                     <div class="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
                     <span class="ml-3 text-sm text-text-secondary">Memuat...</span>
                 </div>
-            `;
-            openModal();
+            </template>
+            <template x-if="error">
+                <div class="py-10 text-center text-sm text-red-500" x-text="error"></div>
+            </template>
+            <template x-if="!loading && !error && data">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="text-xs text-text-secondary">ID Transaksi</span>
+                        <span class="font-mono text-xs" x-text="'#' + data.id"></span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-5">
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Produk</p>
+                            <p class="mt-1 font-medium" x-text="data.product.name"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Kategori</p>
+                            <p class="mt-1 text-text-secondary" x-text="data.product.category.name"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Customer</p>
+                            <p class="mt-1">
+                                <template x-if="data.user">
+                                    <span><span class="font-medium" x-text="data.user.name"></span><span class="text-text-secondary text-xs" x-text="' (' + data.user.email + ')'"></span></span>
+                                </template>
+                                <template x-if="!data.user">
+                                    <span class="text-text-secondary">-</span>
+                                </template>
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Tipe</p>
+                            <p class="mt-1">
+                                <span x-show="data.type === 'sale'" class="inline-flex rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">Penjualan</span>
+                                <span x-show="data.type !== 'sale'" class="inline-flex rounded-full bg-warning/10 px-2.5 py-0.5 text-xs font-medium text-warning">Pembelian</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Jumlah</p>
+                            <p class="mt-1 font-mono" x-text="data.quantity"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Total</p>
+                            <p class="mt-1 font-mono text-lg font-bold" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(data.total)"></p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Tanggal</p>
+                            <p class="mt-1 text-text-secondary" x-text="new Date(data.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })"></p>
+                        </div>
+                    </div>
+                    <template x-if="data.notes">
+                        <div class="border-t border-border pt-4 mt-5">
+                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Catatan</p>
+                            <p class="mt-1 text-sm text-text-secondary" x-text="data.notes"></p>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-detail').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const alpineEl = document.querySelector('[x-data]');
+            const alpine = Alpine.$data(alpineEl);
+            alpine.open = true;
+            alpine.loading = true;
+            alpine.error = null;
+            alpine.data = null;
 
             fetch('/admin/transactions/' + id, {
                 headers: { 'Accept': 'application/json' }
@@ -170,68 +207,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!res.ok) throw new Error('Gagal memuat data');
                 return res.json();
             })
-            .then(function (data) {
-                const typeLabel = data.type === 'sale'
-                    ? '<span class="inline-flex rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success">Penjualan</span>'
-                    : '<span class="inline-flex rounded-full bg-warning/10 px-2.5 py-0.5 text-xs font-medium text-warning">Pembelian</span>';
-
-                const total = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.total);
-                const date = new Date(data.created_at).toLocaleDateString('id-ID', {
-                    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                });
-
-                const notesHtml = data.notes
-                    ? '<div class="border-t border-border pt-4"><p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Catatan</p><p class="mt-1 text-sm text-text-secondary">' + data.notes + '</p></div>'
-                    : '';
-
-                const userHtml = data.user
-                    ? '<span class="font-medium">' + data.user.name + '</span><span class="text-text-secondary text-xs"> (' + data.user.email + ')</span>'
-                    : '<span class="text-text-secondary">-</span>';
-
-                modalBody.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-text-secondary">ID Transaksi</span>
-                        <span class="font-mono text-xs">#${data.id}</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-5">
-                        <div>
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Produk</p>
-                            <p class="mt-1 font-medium">${data.product.name}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Kategori</p>
-                            <p class="mt-1 text-text-secondary">${data.product.category.name}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Customer</p>
-                            <p class="mt-1">${userHtml}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Tipe</p>
-                            <p class="mt-1">${typeLabel}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Jumlah</p>
-                            <p class="mt-1 font-mono">${data.quantity}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Total</p>
-                            <p class="mt-1 font-mono text-lg font-bold">${total}</p>
-                        </div>
-                        <div class="col-span-2">
-                            <p class="text-xs font-medium uppercase tracking-wider text-text-secondary">Tanggal</p>
-                            <p class="mt-1 text-text-secondary">${date}</p>
-                        </div>
-                    </div>
-                    ${notesHtml}
-                `;
+            .then(function (d) {
+                alpine.data = d;
+                alpine.loading = false;
             })
             .catch(function () {
-                modalBody.innerHTML = '<div class="py-10 text-center text-sm text-red-500">Gagal memuat data transaksi.</div>';
+                alpine.error = 'Gagal memuat data transaksi.';
+                alpine.loading = false;
             });
         });
     });
 });
 </script>
-@endpush
 @endsection

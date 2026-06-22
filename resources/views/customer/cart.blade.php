@@ -28,7 +28,7 @@
     @endif
 
     @forelse ($items as $item)
-    <div class="mb-4 rounded-[12px] border border-border bg-surface p-5 transition-all hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
+    <div x-data="{ qty: {{ $item->quantity }}, min: 1, max: {{ $item->product->stock }} }" class="mb-4 rounded-[12px] border border-border bg-surface p-5 transition-all hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
         <div class="flex items-center gap-5">
             <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/5 to-secondary/5">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="text-primary/30"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
@@ -49,9 +49,9 @@
                     @csrf
                     @method('PATCH')
                     <div class="flex items-center rounded-lg border border-border overflow-hidden">
-                        <button type="button" class="qty-minus px-2.5 py-1.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer text-sm leading-none" data-target="qty-{{ $item->id }}">−</button>
-                        <input type="number" name="quantity" id="qty-{{ $item->id }}" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}" class="w-12 border-x border-border bg-bg px-2 py-1.5 text-center text-sm outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none">
-                        <button type="button" class="qty-plus px-2.5 py-1.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer text-sm leading-none" data-target="qty-{{ $item->id }}">+</button>
+                        <button type="button" @click="qty = Math.max(min, qty - 1)" class="px-2.5 py-1.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer text-sm leading-none">−</button>
+                        <input type="number" name="quantity" x-model="qty" :min="min" :max="max" class="w-12 border-x border-border bg-bg px-2 py-1.5 text-center text-sm outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none">
+                        <button type="button" @click="qty = Math.min(max, qty + 1)" class="px-2.5 py-1.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer text-sm leading-none">+</button>
                     </div>
                     <button type="submit" class="rounded-lg px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors cursor-pointer">Update</button>
                 </form>
@@ -91,25 +91,4 @@
     </div>
     @endif
 </div>
-
-@push('scripts')
-<script>
-document.querySelectorAll('.qty-minus, .qty-plus').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-        const targetId = this.dataset.target;
-        const input = document.getElementById(targetId);
-        const min = parseInt(input.min) || 1;
-        const max = parseInt(input.max) || 9999;
-        let val = parseInt(input.value) || min;
-
-        if (this.classList.contains('qty-minus')) {
-            val = Math.max(min, val - 1);
-        } else {
-            val = Math.min(max, val + 1);
-        }
-        input.value = val;
-    });
-});
-</script>
-@endpush
 @endsection

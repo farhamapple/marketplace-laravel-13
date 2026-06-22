@@ -41,10 +41,10 @@
                     <form method="POST" action="{{ route('customer.cart.store') }}" class="mt-8 flex items-center gap-3">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <div class="flex items-center rounded-xl border border-border overflow-hidden">
-                            <button type="button" class="qty-detail-minus px-3 py-2.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer" data-target="detail-qty">−</button>
-                            <input type="number" name="quantity" id="detail-qty" value="1" min="1" max="{{ $product->stock }}" class="w-14 border-x border-border bg-bg px-2 py-2.5 text-center text-sm outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" {{ $product->stock < 1 ? 'disabled' : '' }}>
-                            <button type="button" class="qty-detail-plus px-3 py-2.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer" data-target="detail-qty">+</button>
+                        <div x-data="{ qty: 1, min: 1, max: {{ $product->stock }} }" class="flex items-center rounded-xl border border-border overflow-hidden">
+                            <button type="button" @click="qty = Math.max(min, qty - 1)" class="px-3 py-2.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer">−</button>
+                            <input type="number" name="quantity" x-model="qty" :min="min" :max="max" class="w-14 border-x border-border bg-bg px-2 py-2.5 text-center text-sm outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" {{ $product->stock < 1 ? 'disabled' : '' }}>
+                            <button type="button" @click="qty = Math.min(max, qty + 1)" class="px-3 py-2.5 text-text-secondary hover:bg-bg transition-colors cursor-pointer">+</button>
                         </div>
                         <button type="submit" class="flex-1 rounded-xl bg-primary px-6 py-2.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors cursor-pointer" {{ $product->stock < 1 ? 'disabled' : '' }}>
                             {{ $product->stock < 1 ? 'Stok Habis' : '+ Tambah ke Keranjang' }}
@@ -59,25 +59,4 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-document.querySelectorAll('.qty-detail-minus, .qty-detail-plus').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-        const targetId = this.dataset.target;
-        const input = document.getElementById(targetId);
-        const min = parseInt(input.min) || 1;
-        const max = parseInt(input.max) || 9999;
-        let val = parseInt(input.value) || min;
-
-        if (this.classList.contains('qty-detail-minus')) {
-            val = Math.max(min, val - 1);
-        } else {
-            val = Math.min(max, val + 1);
-        }
-        input.value = val;
-    });
-});
-</script>
-@endpush
 @endsection

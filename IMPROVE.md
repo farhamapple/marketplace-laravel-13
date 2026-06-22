@@ -11,15 +11,15 @@
 ## 🟡 Medium Impact
 
 - [x] **#6 — Form Request Validation** — Pisah validasi ke `app/Http/Requests/` biar reusable
-- [ ] **#7 — Seeder & Factory** — Data dummy untuk testing (users, categories, products, transactions)
+- [x] **#7 — Seeder & Factory** — CategoryFactory, ProductFactory, DatabaseSeeder pakai factory
 - [x] **#8 — Slug update otomatis** — Saat edit kategori, slug ikut berubah
-- [ ] **#9 — Notifikasi stok menipis** — Alert/notifikasi kalau stok produk di bawah threshold
+- [x] **#9 — Notifikasi stok menipis** — Alert banner di dashboard admin untuk produk stok 1-5
 - [ ] **#10 — Export Laporan (PDF/Excel)** — Export transaksi per periode
 
 ## 🔵 Low Impact / Nice-to-have
 
 - [ ] **#11 — Unit & Feature Tests** — Tambah test untuk workflow utama
-- [ ] **#12 — Frontend framework (Alpine.js)** — Ganti semua JS inline agar terstruktur
+- [x] **#12 — Frontend framework (Alpine.js)** — Ganti semua JS inline agar terstruktur
 - [ ] **#13 — Role & Permission granular** — Policy/Gate untuk tiap aksi
 - [x] **#14 — Soft Deletes** — Produk & kategori tidak hilang permanen
 - [x] **#15 — Localization** — Konsistenkan Bahasa Indonesia di auth, layout, home, welcome
