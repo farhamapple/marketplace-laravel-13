@@ -11,8 +11,16 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @tags Customers
+ */
 class CustomerController extends Controller
 {
+    /**
+     * List all customers.
+     *
+     * Supports pagination, search, and sorting.
+     */
     public function index(Request $request): CustomerCollection
     {
         $query = User::where('role', 'customer');
@@ -42,6 +50,9 @@ class CustomerController extends Controller
         );
     }
 
+    /**
+     * Create a new customer.
+     */
     public function store(StoreCustomerRequest $request): JsonResponse
     {
         $user = User::create([
@@ -58,6 +69,9 @@ class CustomerController extends Controller
         ], 201);
     }
 
+    /**
+     * Get a single customer by ID.
+     */
     public function show(User $customer): JsonResponse
     {
         if ($customer->role !== 'customer') {
@@ -71,6 +85,9 @@ class CustomerController extends Controller
         ]);
     }
 
+    /**
+     * Update a customer (full or partial).
+     */
     public function update(UpdateCustomerRequest $request, User $customer): JsonResponse
     {
         if ($customer->role !== 'customer') {
@@ -86,6 +103,9 @@ class CustomerController extends Controller
         ]);
     }
 
+    /**
+     * Soft-delete a customer.
+     */
     public function destroy(User $customer): JsonResponse
     {
         if ($customer->role !== 'customer') {

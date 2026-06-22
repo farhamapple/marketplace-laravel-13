@@ -59,7 +59,7 @@
 - [x] Implement proper HTTP status codes (200, 201, 204, 400, 404, 422, 429, 500)
 - [x] Implement consistent error handling (Handler class with JSON exceptions)
 - [x] Implement API rate limiting (throttle middleware per IP/user/token)
-- [ ] Implement request logging middleware (method, URL, status, duration, IP)
+- [x] Implement request logging middleware (method, URL, status, duration, IP)
 
 ## 5. Security Implementation
 
@@ -96,7 +96,7 @@
 
 ## 7. Documentation
 
-- [ ] Write API reference (OpenAPI/Swagger spec or dedicated doc site):
+- [x] Write API reference (OpenAPI/Swagger spec or dedicated doc site):
   - Endpoint descriptions, methods, paths
   - Request/response examples for each endpoint
   - Error response catalog (all possible errors per endpoint)

@@ -11,8 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @tags Auth
+ */
 class AuthController extends Controller
 {
+    /**
+     * Register a new customer account.
+     */
     public function register(StoreCustomerRequest $request): JsonResponse
     {
         $user = User::create([
@@ -32,6 +38,9 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /**
+     * Login with email and password.
+     */
     public function login(Request $request): JsonResponse
     {
         $request->validate([
@@ -56,6 +65,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Get the authenticated user's profile.
+     */
     public function me(Request $request): JsonResponse
     {
         return response()->json([
@@ -63,6 +75,9 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Logout and revoke current token.
+     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
