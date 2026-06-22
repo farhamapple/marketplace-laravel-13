@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['name', 'image', 'category_id', 'stock', 'sold', 'price'];
 
     protected function casts(): array
@@ -17,7 +20,7 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withTrashed();
     }
 
     public function transactions()
