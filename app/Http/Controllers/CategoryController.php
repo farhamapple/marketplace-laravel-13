@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,14 +22,9 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        Category::create($validated);
+        Category::create($request->validated());
 
         return to_route('categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
@@ -38,14 +34,9 @@ class CategoryController extends Controller
         return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(StoreCategoryRequest $request, Category $category): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-        ]);
-
-        $category->update($validated);
+        $category->update($request->validated());
 
         return to_route('categories.index')->with('success', 'Kategori berhasil diperbarui.');
     }

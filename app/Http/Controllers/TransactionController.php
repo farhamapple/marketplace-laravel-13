@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTransactionRequest;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
@@ -35,14 +36,9 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreTransactionRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'type' => 'required|in:purchase,sale',
-            'quantity' => 'required|integer|min:1',
-            'notes' => 'nullable|string|max:1000',
-        ]);
+        $validated = $request->validated();
 
         $product = Product::findOrFail($validated['product_id']);
         $unitPrice = $product->price;

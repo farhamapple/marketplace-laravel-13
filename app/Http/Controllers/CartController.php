@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCartRequest;
+use App\Http\Requests\UpdateCartRequest;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Transaction;
@@ -24,12 +26,9 @@ class CartController extends Controller
         return view("customer.cart", compact("items", "total"));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCartRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            "product_id" => "required|exists:products,id",
-            "quantity" => "required|integer|min:1",
-        ]);
+        $validated = $request->validated();
 
         $product = Product::findOrFail($validated["product_id"]);
 
@@ -58,15 +57,13 @@ class CartController extends Controller
         return redirect()->route("customer.dashboard")->with("success", "Produk ditambahkan ke keranjang.");
     }
 
-    public function update(Request $request, Cart $cart): RedirectResponse
+    public function update(UpdateCartRequest $request, Cart $cart): RedirectResponse
     {
         if ($cart->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $validated = $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         $product = $cart->product;
 
