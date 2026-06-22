@@ -1,24 +1,18 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CustomerController;
 use Illuminate\Support\Facades\Route;
 
-Route::post("/tokens/create", function (Request $request) {
-    $validated = $request->validate([
-        "email" => "required|email",
-        "password" => "required",
-        "device_name" => "required|string",
-    ]);
+Route::prefix('v1')->group(function () {
+    Route::post('/auth/register', [AuthController::class, 'register']);
+    Route::post('/auth/login', [AuthController::class, 'login']);
 
-    $user = \App\Models\User::where("email", $validated["email"])->first();
+    Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+        Route::get('/auth/me', [AuthController::class, 'me']);
+        Route::post('/auth/logout', [AuthController::class, 'logout']);
 
-    if (! $user || ! \Illuminate\Support\Facades\Hash::check($validated["password"], $user->password)) {
-        return response()->json(["message" => "Invalid credentials"], 401);
-    }
-
-    return ["token" => $user->createToken($validated["device_name"])->plainTextToken];
-});
-
-Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
-    return $request->user();
+        Route::apiResource('customers', CustomerController::class)
+            ->parameters(['customers' => 'customer']);
+    });
 });
