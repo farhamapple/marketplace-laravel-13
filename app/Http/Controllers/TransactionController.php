@@ -11,10 +11,20 @@ use Illuminate\View\View;
 
 class TransactionController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = Transaction::with(['product.category', 'user']);
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
         return view('transactions.index', [
-            'transactions' => Transaction::with(['product.category', 'user'])->latest()->get(),
+            'transactions' => $query->latest()->paginate(10)->withQueryString(),
         ]);
     }
 
@@ -57,10 +67,16 @@ class TransactionController extends Controller
         return to_route('admin.transactions.index')->with('success', 'Transaksi berhasil dicatat.');
     }
 
-    public function show(Transaction $transaction): View
+    public function show(Transaction $transaction): View|\Illuminate\Http\JsonResponse
     {
+        $transaction->load(['product.category', 'user']);
+
+        if (request()->wantsJson()) {
+            return response()->json($transaction);
+        }
+
         return view('transactions.show', [
-            'transaction' => $transaction->load(['product.category', 'user']),
+            'transaction' => $transaction,
         ]);
     }
 

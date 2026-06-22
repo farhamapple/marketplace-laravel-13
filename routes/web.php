@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerTransactionController;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Transaction;
 
@@ -34,12 +35,33 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', function () {
+        Route::get('/dashboard', function (Illuminate\Http\Request $request) {
+            $query = Product::with('category');
+
+            if ($request->filled('search')) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            }
+
+            if ($request->filled('category_id')) {
+                $query->where('category_id', $request->category_id);
+            }
+
+            if ($request->filled('stock')) {
+                match ($request->stock) {
+                    'in' => $query->where('stock', '>', 0),
+                    'out' => $query->where('stock', 0),
+                    'low' => $query->whereBetween('stock', [1, 5]),
+                    default => null,
+                };
+            }
+
             return view('dashboard', [
+                'products' => $query->latest()->get(),
+                'categories' => Category::all(),
                 'totalProduk' => Product::count(),
                 'totalTerjual' => Transaction::where('type', 'sale')->sum('quantity'),
                 'sisaProduk' => Product::sum('stock'),
-                'jumlahJenis' => Product::with('category')->get()->unique('category_id')->count(),
+                'jumlahJenis' => Category::count(),
             ]);
         })->name('dashboard');
 

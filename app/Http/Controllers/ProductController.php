@@ -10,10 +10,30 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = Product::with('category');
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('stock')) {
+            match ($request->stock) {
+                'in' => $query->where('stock', '>', 0),
+                'out' => $query->where('stock', 0),
+                'low' => $query->whereBetween('stock', [1, 5]),
+                default => null,
+            };
+        }
+
         return view('products.index', [
-            'products' => Product::with('category')->latest()->get(),
+            'products' => $query->latest()->get(),
+            'categories' => Category::all(),
         ]);
     }
 

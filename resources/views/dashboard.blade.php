@@ -48,7 +48,32 @@
     </div>
 
     <div class="mb-10">
-        <h2 class="mb-4 font-display text-xl font-bold tracking-[-0.03em]">Daftar Produk</h2>
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <h2 class="font-display text-xl font-bold tracking-[-0.03em]">Daftar Produk</h2>
+            <form method="GET" action="{{ route('admin.dashboard') }}" class="flex flex-wrap items-center gap-3">
+                <input type="text" name="search" placeholder="Cari nama produk..." value="{{ request('search') }}" class="rounded-xl border border-border bg-bg px-3 py-2 text-sm placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 w-48">
+
+                <select name="category_id" class="rounded-xl border border-border bg-bg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <option value="">Semua Kategori</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+
+                <select name="stock" class="rounded-xl border border-border bg-bg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <option value="">Semua Stok</option>
+                    <option value="in" {{ request('stock') == 'in' ? 'selected' : '' }}>Tersedia</option>
+                    <option value="low" {{ request('stock') == 'low' ? 'selected' : '' }}>Hampir Habis</option>
+                    <option value="out" {{ request('stock') == 'out' ? 'selected' : '' }}>Habis</option>
+                </select>
+
+                <button type="submit" class="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Filter</button>
+
+                @if (request()->anyFilled(['search', 'category_id', 'stock']))
+                    <a href="{{ route('admin.dashboard') }}" class="rounded-xl border border-border px-4 py-2 text-sm font-medium text-text-secondary hover:bg-bg/50 transition-colors">Reset</a>
+                @endif
+            </form>
+        </div>
         <div class="overflow-hidden rounded-[12px] border border-border bg-surface">
             <table class="w-full text-sm">
                 <thead>
@@ -61,7 +86,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (App\Models\Product::with('category')->get() as $product)
+                    @forelse ($products as $product)
                     <tr class="border-b border-border last:border-0 hover:bg-bg/50 transition-colors">
                         <td class="px-4 py-3 font-medium">{{ $product->name }}</td>
                         <td class="px-4 py-3 text-text-secondary">
@@ -71,7 +96,11 @@
                         <td class="px-4 py-3 text-right">{{ $product->stock }}</td>
                         <td class="px-4 py-3 text-right">{{ $product->sold }}</td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-4 py-10 text-center text-sm text-text-secondary">Tidak ada produk yang ditemukan.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

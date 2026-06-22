@@ -16,6 +16,32 @@
         <div class="mb-6 rounded-xl border border-success/20 bg-success/5 px-4 py-3 text-sm text-success">{{ session('success') }}</div>
     @endif
 
+    <div class="mb-4 flex flex-wrap items-center gap-3">
+        <form method="GET" action="{{ route('admin.products.index') }}" class="flex flex-wrap items-center gap-3">
+            <input type="text" name="search" placeholder="Cari nama produk..." value="{{ request('search') }}" class="rounded-xl border border-border bg-bg px-3 py-2 text-sm placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 w-48">
+
+            <select name="category_id" class="rounded-xl border border-border bg-bg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">Semua Kategori</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+
+            <select name="stock" class="rounded-xl border border-border bg-bg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="">Semua Stok</option>
+                <option value="in" {{ request('stock') == 'in' ? 'selected' : '' }}>Tersedia</option>
+                <option value="low" {{ request('stock') == 'low' ? 'selected' : '' }}>Hampir Habis</option>
+                <option value="out" {{ request('stock') == 'out' ? 'selected' : '' }}>Habis</option>
+            </select>
+
+            <button type="submit" class="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors">Filter</button>
+
+            @if (request()->anyFilled(['search', 'category_id', 'stock']))
+                <a href="{{ route('admin.products.index') }}" class="rounded-xl border border-border px-4 py-2 text-sm font-medium text-text-secondary hover:bg-bg/50 transition-colors">Reset</a>
+            @endif
+        </form>
+    </div>
+
     <div class="overflow-hidden rounded-[12px] border border-border bg-surface">
         <table class="w-full text-sm">
             <thead>
@@ -51,7 +77,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-4 py-10 text-center text-sm text-text-secondary">Belum ada produk.</td>
+                    <td colspan="6" class="px-4 py-10 text-center text-sm text-text-secondary">Tidak ada produk yang ditemukan.</td>
                 </tr>
                 @endforelse
             </tbody>
