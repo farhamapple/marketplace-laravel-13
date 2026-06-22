@@ -63,6 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
                 };
             }
 
+            $lowStockProducts = Product::with('category')->whereBetween('stock', [1, 5])->get();
+
             return view('dashboard', [
                 'products' => $query->latest()->get(),
                 'categories' => Category::all(),
@@ -70,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'totalTerjual' => Transaction::where('type', 'sale')->sum('quantity'),
                 'sisaProduk' => Product::sum('stock'),
                 'jumlahJenis' => Category::count(),
+                'lowStockProducts' => $lowStockProducts,
             ]);
         })->name('dashboard');
 

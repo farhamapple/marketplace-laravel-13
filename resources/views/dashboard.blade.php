@@ -9,6 +9,28 @@
         <p class="mt-1 text-sm text-text-secondary">Selamat datang kembali, {{ Auth::user()->name }}</p>
     </div>
 
+    @if ($lowStockProducts->isNotEmpty())
+    <div class="mb-6 rounded-xl border border-warning/20 bg-warning/5 px-5 py-4">
+        <div class="flex items-start gap-3">
+            <div class="mt-0.5 shrink-0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-warning"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm font-medium text-warning">Stok Menipis</p>
+                <p class="mt-1 text-xs text-text-secondary">{{ $lowStockProducts->count() }} produk hampir habis. Segera lakukan restock.</p>
+                <div class="mt-2 flex flex-wrap gap-2">
+                    @foreach ($lowStockProducts as $p)
+                        <span class="inline-flex items-center gap-1 rounded-full bg-warning/10 px-2.5 py-0.5 text-[11px] font-medium text-warning">
+                            {{ $p->name }}
+                            <span class="opacity-70">({{ $p->stock }})</span>
+                        </span>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div class="rounded-[12px] border border-border bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
             <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
