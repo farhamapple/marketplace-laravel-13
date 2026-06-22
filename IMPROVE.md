@@ -12,7 +12,7 @@
 
 - [ ] **#6 — Form Request Validation** — Pisah validasi ke `app/Http/Requests/` biar reusable
 - [ ] **#7 — Seeder & Factory** — Data dummy untuk testing (users, categories, products, transactions)
-- [ ] **#8 — Slug update otomatis** — Saat edit kategori, slug ikut berubah
+- [x] **#8 — Slug update otomatis** — Saat edit kategori, slug ikut berubah
 - [ ] **#9 — Notifikasi stok menipis** — Alert/notifikasi kalau stok produk di bawah threshold
 - [ ] **#10 — Export Laporan (PDF/Excel)** — Export transaksi per periode
 
@@ -22,4 +22,4 @@
 - [ ] **#12 — Frontend framework (Alpine.js)** — Ganti semua JS inline agar terstruktur
 - [ ] **#13 — Role & Permission granular** — Policy/Gate untuk tiap aksi
 - [ ] **#14 — Soft Deletes** — Produk & kategori tidak hilang permanen
-- [ ] **#15 — Localization** — Konsistenkan Bahasa Indonesia di seluruh aplikasi
+- [x] **#15 — Localization** — Konsistenkan Bahasa Indonesia di auth, layout, home, welcome
