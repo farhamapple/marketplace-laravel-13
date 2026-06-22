@@ -12,6 +12,7 @@ class Category extends Model
     protected static function booted(): void
     {
         static::creating(fn (Category $category) => $category->slug ??= Str::slug($category->name));
+        static::updating(fn (Category $category) => $category->slug = Str::slug($category->name));
     }
 
     public function products()
