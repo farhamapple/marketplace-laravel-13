@@ -125,13 +125,74 @@ Buka **http://localhost** di browser.
 
 ---
 
+## RESTful API (`/api/v1/*`)
+
+API untuk konsumsi eksternal dengan autentikasi **Sanctum Bearer Token**.
+
+### Dokumentasi
+
+- **Swagger UI**: `GET /docs/api` — dokumentasi interaktif (try-it-out)
+
+### Autentikasi
+
+| Endpoint | Method | Auth | Keterangan |
+|----------|--------|------|------------|
+| `/api/v1/auth/register` | POST | - | Register customer baru |
+| `/api/v1/auth/login` | POST | - | Login, dapatkan token |
+| `/api/v1/auth/me` | GET | Bearer | Profil user saat ini |
+| `/api/v1/auth/logout` | POST | Bearer | Revoke token |
+
+### Customer Management
+
+| Endpoint | Method | Auth | Keterangan |
+|----------|--------|------|------------|
+| `/api/v1/customers` | GET | Bearer | List customer (pagination, search, sort) |
+| `/api/v1/customers` | POST | Bearer | Create customer |
+| `/api/v1/customers/{id}` | GET | Bearer | Detail customer |
+| `/api/v1/customers/{id}` | PUT | Bearer | Update customer |
+| `/api/v1/customers/{id}` | PATCH | Bearer | Partial update |
+| `/api/v1/customers/{id}` | DELETE | Bearer | Soft-delete customer |
+
+### Query Parameters (List)
+
+| Parameter | Contoh | Keterangan |
+|-----------|--------|------------|
+| `?per_page=` | `?per_page=25` | Item per halaman (max 100) |
+| `?page=` | `?page=2` | Halaman |
+| `?search=` | `?search=budi` | Cari nama/email |
+| `?sort=` | `?sort=-name` | Sort kolom, awali `-` untuk descending |
+
+### Response Format
+
+```json
+{
+  "data": { "id": 1, "name": "Budi", "email": "budi@test.com", "phone": null, "address": null, "role": "customer", "created_at": "...", "updated_at": "..." }
+}
+```
+
+Error:
+
+```json
+{
+  "error": { "code": "VALIDATION_ERROR", "message": "Validasi gagal.", "details": { "email": ["Email sudah terdaftar."] } }
+}
+```
+
+### Rate Limiting
+
+60 requests per menit per user/IP. Response `429 Too Many Requests` jika terlampaui.
+
+---
+
 ## Tech Stack
 
 - **Backend**: Laravel 13, PHP 8.5
-- **Frontend**: Tailwind CSS v4, Vite
+- **Frontend**: Tailwind CSS v4, Vite, Alpine.js
 - **Database**: MySQL 8.4
 - **Cache**: Redis
 - **Auth**: Laravel Sanctum
+- **API Docs**: Scramble (OpenAPI 3.1)
+- **Export**: OpenSpout (XLSX/CSV), Dompdf (PDF)
 - **Container**: Docker (Laravel Sail)
 
 ---
