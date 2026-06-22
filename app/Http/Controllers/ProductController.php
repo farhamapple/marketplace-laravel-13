@@ -92,6 +92,13 @@ class ProductController extends Controller
         return to_route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
+    public function show(Product $product): View
+    {
+        return view('products.show', [
+            'product' => $product->load('category'),
+        ]);
+    }
+
     public function destroy(Product $product): RedirectResponse
     {
         $product->delete();

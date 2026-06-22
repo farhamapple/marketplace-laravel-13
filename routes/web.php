@@ -29,6 +29,8 @@ Route::get('/', function (Illuminate\Http\Request $request) {
     ]);
 });
 
+Route::get('/product/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);

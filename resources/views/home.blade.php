@@ -70,7 +70,7 @@
                     @endif
                 </div>
                 <div class="mb-1 flex items-start justify-between gap-2">
-                    <h3 class="font-display font-semibold tracking-tight">{{ $product->name }}</h3>
+                    <a href="{{ route('product.show', $product) }}" class="font-display font-semibold tracking-tight hover:text-primary transition-colors">{{ $product->name }}</a>
                     <span class="shrink-0 rounded-full bg-neutral/10 px-2 py-0.5 text-[10px] font-medium text-text-secondary">{{ $product->category->name }}</span>
                 </div>
                 <p class="mb-3 font-mono text-lg font-bold">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
