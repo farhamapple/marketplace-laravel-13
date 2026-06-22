@@ -15,7 +15,7 @@ use App\Models\Transaction;
 
 Route::get('/', function () {
     return view('home', [
-        'products' => App\Models\Product::with('category')->get(),
+        'products' => App\Models\Product::with('category')->latest()->paginate(12)->withQueryString(),
         'totalProduk' => App\Models\Product::count(),
         'totalStok' => App\Models\Product::sum('stock'),
         'totalTerjual' => App\Models\Transaction::where('type', 'sale')->sum('quantity'),

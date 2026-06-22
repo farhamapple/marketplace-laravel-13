@@ -12,7 +12,7 @@ class CategoryController extends Controller
     public function index(): View
     {
         return view('categories.index', [
-            'categories' => Category::withCount('products')->latest()->get(),
+            'categories' => Category::withCount('products')->latest()->paginate(10)->withQueryString(),
         ]);
     }
 

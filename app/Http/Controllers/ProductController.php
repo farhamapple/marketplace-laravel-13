@@ -32,7 +32,7 @@ class ProductController extends Controller
         }
 
         return view('products.index', [
-            'products' => $query->latest()->get(),
+            'products' => $query->latest()->paginate(10)->withQueryString(),
             'categories' => Category::all(),
         ]);
     }

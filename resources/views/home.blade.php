@@ -84,6 +84,10 @@
             </div>
             @endforelse
         </div>
+
+        <div class="mt-10 flex justify-center">
+            {{ $products->links() }}
+        </div>
     </section>
 
     {{-- Footer --}}

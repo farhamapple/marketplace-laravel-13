@@ -59,11 +59,14 @@
         </table>
     </div>
 
-    @if ($transactions->isNotEmpty())
-    <div class="mt-6 text-right">
+    @if ($transactions->total() > 0)
+    <div class="mt-6 flex items-center justify-between">
         <p class="text-sm text-text-secondary">
-            Total transaksi: <span class="font-semibold text-text-primary">{{ $transactions->count() }}</span>
+            Total transaksi: <span class="font-semibold text-text-primary">{{ $transactions->total() }}</span>
         </p>
+        <div>
+            {{ $transactions->links() }}
+        </div>
     </div>
     @endif
 </div>

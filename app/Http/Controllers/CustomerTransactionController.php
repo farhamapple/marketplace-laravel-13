@@ -13,7 +13,8 @@ class CustomerTransactionController extends Controller
         $transactions = Transaction::with("product.category")
             ->where("user_id", Auth::id())
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view("customer.transactions", compact("transactions"));
     }
